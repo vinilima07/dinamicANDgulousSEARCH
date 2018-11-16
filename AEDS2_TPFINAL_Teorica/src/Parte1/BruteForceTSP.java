@@ -1,9 +1,5 @@
 package Parte1;
 
-/*
- * Problem Statement: 	Solve traveling salesman problem using brute force search 
- */
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

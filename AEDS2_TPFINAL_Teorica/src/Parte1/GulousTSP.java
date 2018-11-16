@@ -1,10 +1,5 @@
-package Parte2;
+package Parte1;
 
-/*
- * Problem Statement: 	Solve traveling salesman problem using brute force search 
- */
-
-import Parte1.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -153,16 +148,21 @@ public class GulousTSP {
         }
         fileWriter.close();
     }
-
-    public static void main(String[] args) throws IOException {
-//            Scanner s = new Scanner(System.in);
-//            System.out.println("Insira o numero de cidades");
-//             s.nextInt()
-
-        for(int i = 2; i < 16 ; i+=2){
-            generateAdj(i);
-            startTSP("src\\Parte1\\adjacencias"+i+".txt");
-            System.out.println("\n");
-        }
-    }
+    /***
+     * SOLUCAO GULOSA PARA O TSP
+       BASTA DESCOMENTAR ESSA MAIN E EXECUTA-LA
+       ELA RESOLVE CRIANDO UMA AMOSTRA DE VARIACOES DE CAMINHO
+       E SELECIANO O MELHOR CAMINHO DENTRO DA AMOSTRA*
+     **/
+//    public static void main(String[] args) throws IOException {
+////            Scanner s = new Scanner(System.in);
+////            System.out.println("Insira o numero de cidades");
+////             s.nextInt()
+//
+//        for(int i = 2; i < 16 ; i+=2){
+//            generateAdj(i);
+//            startTSP("src\\Parte1\\adjacencias"+i+".txt");
+//            System.out.println("\n");
+//        }
+//    }
 }
