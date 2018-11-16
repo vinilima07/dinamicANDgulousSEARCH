@@ -1,9 +1,10 @@
-package Parte1;
+package Parte2;
 
 /*
  * Problem Statement: 	Solve traveling salesman problem using brute force search 
  */
 
+import Parte1.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,10 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
-public class BruteForceTSP {
+public class GulousTSP {
 
     /*
      * shortestPath:		o menor caminho para percorrer todas as cidades apenas uma vez cada.
@@ -64,7 +66,7 @@ public class BruteForceTSP {
             for(int city : shortestPath){
                 System.out.print((Integer.toString(city))+"->");
             }
-            System.out.println("0 :=: Time: "+(endTime-startTime)+"ms"+" Distancia: "+shortestDistance);
+            System.out.println("0 :=: Time: "+(endTime-startTime)+"ms");
 
             } catch(FileNotFoundException expception) {
 
@@ -80,9 +82,8 @@ public class BruteForceTSP {
     }
 
     /*
-     * Resolve o problema
+     * Resolve o tsp criando a indexacao inicial
      * 
-     * @param	distanceMatrix	armazena todas as distancias das adjacencias
      * */
     private static void solveTSP(int[][] distanceMatrix) {
 
@@ -93,48 +94,36 @@ public class BruteForceTSP {
             }
             int startCity = cities.get(0);
             int currentDistance = 0;
-            bruteForceSearch(distanceMatrix, cities, startCity, currentDistance);
+            gulousSearch(distanceMatrix, cities);
     }
     /*
-     * Metodo recursivo que por meio meio da forca bruta gera todas as possiveis permutacoes da jornada
+     * Metodo guloso gera (10000*numero de cidades) variacoes de 
+       caminho e dentro dessa amostra pega a melhor de forma a torna-la
+       polinomial
      * 
      * @param	distanceMatrix	armazena a matriz de adjancencias.
      * @param	cities possiveis caminhos da jornada
-     * @param	startCity cidade inicial
-     * @param	currentDistance	distancia percorrida na jornada.
      * */
 
-    private static void bruteForceSearch(int[][] distanceMatrix, ArrayList<Integer> cities, int startCity, int currentDistance) {
-
-            if(startCity < cities.size()-1){
-                    for(int i=startCity; i < cities.size(); i++){
-                            int tempCity = cities.get(i);
-                            cities.set(i, cities.get(startCity));
-                            cities.set(startCity, tempCity);
-                            currentDistance = computeDistance(cities,distanceMatrix);
-                            bruteForceSearch(distanceMatrix, cities, startCity+1, currentDistance);
-                            tempCity = cities.get(i);
-                            cities.set(i, cities.get(startCity));
-                            cities.set(startCity, tempCity);
-                    }
-            }
-            else{
-                    if(shortestDistance > currentDistance){
-                            shortestDistance = currentDistance;
-                            shortestPath = new ArrayList<Integer>(cities);
-                    }
-                    if(longestDistance < currentDistance){
-                            longestDistance = currentDistance;
-                            //longestPath = new ArrayList<Integer>(cities);
-                    }
+    private static void gulousSearch(int[][] distanceMatrix, ArrayList<Integer> cities) {
+            int currentDistance;
+            for(int i = 0; i < 5000*cities.size() ; i++){
+                cities.remove(0);
+                Collections.shuffle(cities); //embaralha as cidades
+                cities.add(0, 0);
+                currentDistance = computeDistance(cities,distanceMatrix);
+                if(shortestDistance > currentDistance){
+                    shortestDistance = currentDistance;
+                    shortestPath = new ArrayList<Integer>(cities);
+                }
             }
     }
 
     /*
-     * Verifica a distancia total da jornada passada
+     * Computes the distance covered during the journey
      * 
-     * @param	cities	Possivel caminho da jornada.
-     * @param	distanceMatrix	armazena a matriz de adjacencia.
+     * @param	cities			possible path of the journey.
+     * @param	distanceMatrix	stores distance between two cities.
      * 
      * */
     private static int computeDistance(ArrayList<Integer> cities, int[][] distanceMatrix) {
@@ -142,7 +131,6 @@ public class BruteForceTSP {
             for(int i=0;i<cities.size()-1;i++){
                     distance = distance + distanceMatrix[cities.get(i)][cities.get(i+1)];
             }
-            //adiciona a distancia para voltar a cidade inicial
             distance = distance + distanceMatrix[cities.get(cities.size()-1)][cities.get(0)];
             return distance;
     }
@@ -171,9 +159,9 @@ public class BruteForceTSP {
 //            System.out.println("Insira o numero de cidades");
 //             s.nextInt()
 
-        for(int i = 2; i < 14 ; i+=2){
-            generateAdj(i); //as matrizes gerada sao diferentes
-            startTSP("src\\Parte1\\adjacencias"+i+".txt"); 
+        for(int i = 2; i < 16 ; i+=2){
+            generateAdj(i);
+            startTSP("src\\Parte1\\adjacencias"+i+".txt");
             System.out.println("\n");
         }
     }
